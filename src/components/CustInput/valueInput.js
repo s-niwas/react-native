@@ -1,17 +1,38 @@
-import React from "react";
-import { Text, View ,TextInput, StyleSheet} from "react-native";
+import React, { useState } from "react";
+import { Text, View , StyleSheet, Touchable, TouchableOpacity} from "react-native";
+import { TextInput } from 'react-native-paper';
 
-const ValueInput=({value,setvalue,placeholder,texts,secureTextEntry})=>{
+import Icons from 'react-native-vector-icons/MaterialCommunityIcons'
+// import { Icon } from "@edvnz/native-icons"
+
+const ValueInput=({value,setvalue,placeholder,texts,secureTextEntry,icons=false})=>{
+    const[visibility,setVisibility]=useState(secureTextEntry);
     return(
         <View style={styles.container}>
             <Text style={styles.header}>{texts}</Text>
-            <TextInput 
+                {icons==true ?( 
+                    <TextInput
                 value={value}
                 onChangeText={setvalue}
-                style={styles.input}
                 placeholder={placeholder} 
-                secureTextEntry={secureTextEntry}
-                />
+                secureTextEntry={visibility}
+                mode="outlined"
+                theme={{colors:{background:'#fff'}}}
+                right=
+                {
+                    <TextInput.Icon
+                    icon= {visibility?"eye":"eye-off"}
+                    color="black"
+                    onPress={()=>setVisibility(!visibility)}/>
+                }
+                />) :(<TextInput 
+                value={value}
+                mode="outlined"
+                onChangeText={setvalue}
+                placeholder={placeholder} 
+                secureTextEntry={visibility}
+                theme={{colors:{background:'#fff'}}}
+                />)}    
         </View>
     )
 }
@@ -28,11 +49,5 @@ const styles=StyleSheet.create({
         lineHeight:21,
         fontFamily:"Poppins", 
     },
-    input:{
-        borderColor:"#858597",
-        borderWidth:1,
-        borderRadius:5,
-        paddingHorizontal:20,
-    }
 })
 export default ValueInput;

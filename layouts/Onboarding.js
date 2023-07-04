@@ -3,7 +3,7 @@ import { Animated, FlatList, StyleSheet, Text, View } from "react-native"
 import slide from "./slide";
 import OnboardingItem from "./OnboardingItem";
 import Currentpagenavigation from "./currentpagenavigation";
-export default Onboarding = ()=>{
+function Onboarding(){
     const scrollX=useRef( new Animated.Value(0)).current;
     const slidesRef=useRef(null);
 
@@ -20,7 +20,7 @@ export default Onboarding = ()=>{
             data={slide}
              renderItem={({item})=><OnboardingItem item={item}/>}
                 horizontal
-                showHorizontalScrollIndicator
+                showHorizontalScrollIndicator={false}
                 pagingEnabled
                 bounces={false}
                 keyExtractor={(item)=>item.id}
@@ -47,3 +47,4 @@ const styles=StyleSheet.create({
         // height:"100%",
     },
 });
+export default Onboarding

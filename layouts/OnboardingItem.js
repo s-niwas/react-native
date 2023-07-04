@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { StyleSheet, Image ,Text, View, useWindowDimensions, Button, TouchableOpacity } from "react-native"
 import SignInScreen from "../src/screens/signinscreen";
 import slide from "./slide";
+import { ScrollView } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
 
 
 export default OnboardingItem = ({item})=>{
@@ -14,24 +17,32 @@ const skippingpress=()=>{
     //ref?.current.scrollToOffset({offset});
     setid(1);
 };
-const signinpage=()=>{<SignInScreen/>}
+const navi =useNavigation();
+const signuppage=()=>{
+    navi.navigate('SignUp');
+}
+const loginpage=()=>{
+    navi.navigate('SignIn');
+}
    
     return(
+        <ScrollView>
         <View style={[styles.container,{width}]}>
             
-            {item.skip=="Skip" ? <Text style={styles.skip} onPress={skippingpress} >{item.skip}+{idd}</Text> : null}
+            {item.skip=="Skip" ? <Text style={styles.skip} onPress={skippingpress} >{item.skip}</Text> : null}
             {item.id==3 ? ()=>{setid(true)}:null}
             <Image source={item.image} style={[styles.image]}/>
             <View style={{flex:0.3}}>
                 <Text style={styles.title}>{item.title}</Text>
                 <Text style={styles.description}>{item.description}</Text>
                 <View style={styles.buttons}>
-                {item.id==3 ? <TouchableOpacity onPress={signinpage} style={styles.signup1} ><Text style={styles.signup2}>Sign Up </Text></TouchableOpacity> :<Text>{"\n\n\n\n"}</Text>}
+                {item.id==3 ? <TouchableOpacity onPress={signuppage} style={styles.signup1} ><Text style={styles.signup2}>Sign Up </Text></TouchableOpacity> :null}
                 <Text>  </Text>
-                {item.id==3 ? <TouchableOpacity onPress={signinpage} style={styles.signin1} ><Text style={styles.signin2}>Log in </Text></TouchableOpacity> :<Text>{"\n\n\n\n"}</Text>}
+                {item.id==3 ? <TouchableOpacity onPress={loginpage} style={styles.signin1} ><Text style={styles.signin2}>Log in </Text></TouchableOpacity> :null}
                  </View>
             </View> 
         </View>
+        </ScrollView>
     );
 };
 
