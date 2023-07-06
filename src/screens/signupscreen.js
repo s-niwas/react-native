@@ -1,32 +1,37 @@
 import {React, useState} from 'react';
-import {
-  Image,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  useWindowDimensions,
-} from 'react-native';
+import {Alert, StyleSheet, Text, View} from 'react-native';
 import ValueInput from '../components/CustInput/valueInput';
 import CustButton from '../components/CustButton/CustButton';
 import {Checkbox} from 'react-native-paper';
-import { useNavigation } from "@react-navigation/native";
+import {useNavigation} from '@react-navigation/native';
+import {useForm} from 'react-hook-form';
+import {Auth} from 'aws-amplify';
 
 const SignUpScreen = () => {
-  const navi =useNavigation();
-  const {height} = useWindowDimensions();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const navi = useNavigation();
+  const {control, handleSubmit} = useForm();
   const [isChecked, setIsChecked] = useState(false);
-  const onSignUpClick = () => {
+
+  const onSignUpClick = async data => {
     if (isChecked) {
-        console.warn('success sign up');
-        navi.navigate('SignIn');
+      console.warn('success sign up');
+      console.log(data);
+      const {email, password} = data;
+      try {
+        await Auth.signUp({
+          username: email,
+          email,
+          password,
+        });
+        navi.navigate('ConfirmEmail', {email});
+      } catch (e) {
+        Alert.alert('Oops', e.message);
+      }
     } else {
-        console.warn('accept terms');
+      console.warn('accept terms');
     }
   };
+
   const onsigninclicking = () => {
     navi.navigate('SignIn');
   };
@@ -42,22 +47,50 @@ const SignUpScreen = () => {
       </View>
       <ValueInput
         placeholder="Email"
-        value={email}
-        setvalue={setEmail}
+        name="email"
+        control={control}
         texts={'Your Email'}
         secureTextEntry={false}
+        rules={{
+          required: '  Email is required',
+          pattern: {
+            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+            message: 'Invalid Email Address',
+          },
+          minLength: {
+            value: 8,
+            message: 'Invalid Email Address',
+          },
+        }}
+        icons={false}
       />
       <ValueInput
         placeholder="Password"
-        value={password}
-        setvalue={setPassword}
-        texts={'Password'}
+        name="password"
+        control={control}
         secureTextEntry={true}
         icons={true}
+        texts={'Password'}
+        rules={{
+          required: '  Password is required',
+          minLength: {
+            value: 8,
+            message: 'Password should have a minimum length of 8 characters',
+          },
+          pattern: {
+            value:
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]+$/,
+            message:
+              'Password should contain at least one uppercase letter, one lowercase letter, one number, and one special character',
+          },
+        }}
       />
-      <CustButton text="Create account" onPressing={onSignUpClick} />
-      <View
-        style={{flexDirection: 'row', width: '85%',margin:13}}>
+
+      <CustButton
+        text="Create account"
+        onPressing={handleSubmit(onSignUpClick)}
+      />
+      <View style={{flexDirection: 'row', width: '85%', margin: 13}}>
         <Checkbox
           status={isChecked ? 'checked' : 'unchecked'}
           onPress={() => {
@@ -70,14 +103,16 @@ const SignUpScreen = () => {
       </View>
       <View style={{margin: 10}}>
         <Text>
-          Already have an account ? 
+          Already have an account ?
           <Text
             style={{
               color: '#3D5CFF',
               fontWeight: '700',
               textDecorationLine: 'underline',
             }}
-            onPress={onsigninclicking}> Log in
+            onPress={onsigninclicking}>
+            {' '}
+            Log in
           </Text>
         </Text>
       </View>
@@ -96,10 +131,10 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     lineHeight: 18,
     textAlign: 'left',
-    alignItems:'flex-start',
-    color:"#858597",
-    justifyContent:'flex-start',
-    width:'80%'
+    alignItems: 'flex-start',
+    color: '#858597',
+    justifyContent: 'flex-start',
+    width: '80%',
   },
   signup_header_content: {
     width: 229,

@@ -1,21 +1,29 @@
 import {React, useState} from 'react';
-import { 
-  StyleSheet,
-  Text,
-  View,
-  useWindowDimensions,
-} from 'react-native';
+import {Alert, StyleSheet, Text, View, useWindowDimensions} from 'react-native';
 import ValueInput from '../CustInput/valueInput';
 import CustButton from '../CustButton/CustButton';
-import { useNavigation } from "@react-navigation/native";
+import {useNavigation} from '@react-navigation/native';
+import {useForm} from 'react-hook-form';
+import {Auth} from 'aws-amplify';
 
 const NewPassword = () => {
-  const navi =useNavigation();
+  const navi = useNavigation();
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm();
   const {height} = useWindowDimensions();
   const [code, setCode] = useState(0);
-  const[password,setPassword]=useState('');
-  const onSubmitting = () => {
-    navi.navigate('SignIn');
+  const [password, setPassword] = useState('');
+  const onSubmitting = async data => {
+    try {
+      await Auth.forgotPasswordSubmit(data.username, data.code, data.password);
+      Alert.alert('Successful', 'Password Reset Successfully');
+      navi.navigate('SignIn');
+    } catch (e) {
+      Alert.alert('Oops', e.message);
+    }
   };
   const onsigninclicking = () => {
     navi.navigate('SignIn');
@@ -28,21 +36,59 @@ const NewPassword = () => {
         </View>
       </View>
       <ValueInput
-        placeholder="Enter your confirmation Code"
-        value={code}
-        setvalue={setCode}
-        texts={'Confirmation Code'}
-        secureTextEntry={true}
+        placeholder="Email"
+        name="username"
+        control={control}
+        texts={'Your Email'}
+        secureTextEntry={false}
+        editable={true}
+        icons={false}
       />
       <ValueInput
-        placeholder="Enter your new password"
-        value={password}
-        setvalue={setPassword}
-        texts={'Password'}
+        placeholder="Enter your confirmation Code"
+        texts={'Confirmation Code'}
+        name="code"
+        control={control}
+        secureTextEntry={true}
+        rules={{
+          required: 'Code is required',
+          pattern: {
+            value: /^\d+$/,
+            message: 'Only numbers allowed',
+          },
+          minLength: {
+            value: 6,
+            message: 'Only 6 digits',
+          },
+          maxLength: {
+            value: 6,
+            message: 'Only 6 digits',
+          },
+        }}
+        keyboards="numeric"
+      />
+      <ValueInput
+        placeholder="Password"
+        name="password"
+        control={control}
         secureTextEntry={true}
         icons={true}
+        texts={'Password'}
+        rules={{
+          required: '  Password is required',
+          minLength: {
+            value: 8,
+            message: 'Password should have a minimum length of 8 characters',
+          },
+          pattern: {
+            value:
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]+$/,
+            message:
+              'Password should contain at least one uppercase letter, one lowercase letter, one number, and one special character',
+          },
+        }}
       />
-      <CustButton text="Submit" onPressing={onSubmitting} />
+      <CustButton text="Submit" onPressing={handleSubmit(onSubmitting)} />
       <View style={{margin: 10}}>
         <Text onPress={onsigninclicking}>Back to Sign In</Text>
       </View>

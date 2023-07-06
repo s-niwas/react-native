@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {
+  Alert,
   Image,
   Pressable,
   ScrollView,
@@ -10,14 +11,37 @@ import {
 } from 'react-native';
 import ValueInput from '../components/CustInput/valueInput';
 import CustButton from '../components/CustButton/CustButton';
-import { useNavigation } from "@react-navigation/native";
+import {useNavigation} from '@react-navigation/native';
+import {Controller, useForm} from 'react-hook-form';
+import {Amplify, Auth} from 'aws-amplify';
+
 const SignInScreen = () => {
-  const navi =useNavigation();
-  const {width} = useWindowDimensions();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const onSignInClick = () => {
-    navi.navigate('HomeScreen');
+  const navi = useNavigation();
+  const [loading, setLoading] = useState(false);
+
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm();
+  console.log(errors);
+  const {height} = useWindowDimensions();
+
+  const onSignInClick = async data => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
+    try {
+      const response = await Auth.signIn(data.email, data.password);
+      console.log(response);
+      navi.navigate('HomeScreen');
+    } catch (e) {
+      Alert.alert('Incorrect', e.message);
+    }
+    setLoading(false);
+    // console.log(data);
+    // navi.navigate('HomeScreen');
   };
   const onForgetPasswordClick = () => {
     navi.navigate('ForgetPassword');
@@ -38,26 +62,54 @@ const SignInScreen = () => {
       </View>
       <ValueInput
         placeholder="Email"
-        value={email}
-        setvalue={setEmail}
+        name="email"
+        control={control}
         texts={'Your Email'}
         secureTextEntry={false}
+        rules={{
+          required: '  Email is required',
+          pattern: {
+            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+            message: 'Invalid Email Address',
+          },
+          minLength: {
+            value: 8,
+            message: 'Invalid Email Address',
+          },
+        }}
         icons={false}
       />
       <ValueInput
         placeholder="Password"
-        value={password}
-        setvalue={setPassword}
-        texts={'Password'}
+        name="password"
+        control={control}
         secureTextEntry={true}
         icons={true}
+        texts={'Password'}
+        rules={{
+          required: '  Password is required',
+          minLength: {
+            value: 8,
+            message: 'Password should have a minimum length of 8 characters',
+          },
+          pattern: {
+            value:
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]+$/,
+            message:
+              'Password should contain at least one uppercase letter, one lowercase letter, one number, and one special character',
+          },
+        }}
       />
+
       <CustButton
         text="Forget password?"
         onPressing={onForgetPasswordClick}
         type="TERTIARY"
       />
-      <CustButton text="Sign In" onPressing={onSignInClick} />
+      <CustButton
+        text={loading ? 'Loading...' : 'Sign In'}
+        onPressing={handleSubmit(onSignInClick)}
+      />
       <View style={{margin: 10}}>
         <Text>
           Don't have an account?
@@ -119,7 +171,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-
   signin_top: {
     width: '100%',
     backgroundColor: '#F0F0F2',

@@ -7,6 +7,7 @@ import Onboarding from '../../layouts/Onboarding';
 import ForgetPassword from '../components/ForgetPassword/ForgetPassword';
 import NewPassword from '../components/NewPassword/NewPassword';
 import HomeScreen from '../screens/homescreen';
+import ConfirmEmail from '../components/ConfirmEmail/ConfirmEmail';
 
 const Stack = createNativeStackNavigator();
 const NavigationScreen = () => {
@@ -19,6 +20,7 @@ const NavigationScreen = () => {
         <Stack.Screen name='ForgetPassword' component={ForgetPassword}/>
         <Stack.Screen name='NewPassword' component={NewPassword}/>
         <Stack.Screen name='HomeScreen' component={HomeScreen}/>
+        <Stack.Screen name='ConfirmEmail' component={ConfirmEmail}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

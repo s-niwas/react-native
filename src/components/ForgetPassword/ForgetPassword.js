@@ -1,5 +1,6 @@
 import {React, useState} from 'react';
 import { 
+  Alert,
   StyleSheet,
   Text,
   View,
@@ -7,14 +8,28 @@ import {
 } from 'react-native';
 import ValueInput from '../CustInput/valueInput';
 import CustButton from '../CustButton/CustButton';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation ,useRoute } from "@react-navigation/native";
+import {Controller, useForm} from 'react-hook-form';
+import { Auth } from 'aws-amplify';
 
 const ForgetPassword = () => {
   const navi =useNavigation();
-  const {height} = useWindowDimensions();
-  const [email, setEmail] = useState('');
-  const onSend = () => {
-    navi.navigate('NewPassword');
+  const {
+    control,
+    handleSubmit,
+    formState:{errors}} = useForm();
+
+    console.log(errors);
+
+
+  const onSend = async data=>{
+    try{
+        await Auth.forgotPassword(data.email);
+        Alert.alert("Successful","Code Sended Successfully");
+      navi.navigate('NewPassword');
+    }catch(e){
+      Alert.alert("Oops",e.message);
+    }
   };
   const onsigninclicking = () => {
     navi.navigate('SignIn');
@@ -28,12 +43,23 @@ const ForgetPassword = () => {
       </View>
       <ValueInput
         placeholder="Email"
-        value={email}
-        setvalue={setEmail}
-        texts={'Your Email'}
+        name="email"
+        control={control}
+        texts ={'Your Email'}
         secureTextEntry={false}
+        rules={{required:"  Email is required",
+          pattern:{
+          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+          message: 'Invalid Email Address',
+          },
+          minLength: {
+          value: 8,
+          message: 'Invalid Email Address',
+        }
+          }}
+        icons={false}  
       />
-      <CustButton text="Change Password" onPressing={onSend} />
+      <CustButton text="Change Password" onPressing={handleSubmit(onSend)} />
       <View style={{margin: 10}}>
         <Text onPress={onsigninclicking}>Back to Sign In</Text>
       </View>
