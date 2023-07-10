@@ -1,11 +1,11 @@
 import {React, useState} from 'react';
 import {Alert, StyleSheet, Text, View} from 'react-native';
-import ValueInput from '../components/CustInput/valueInput';
-import CustButton from '../components/CustButton/CustButton';
-import {Checkbox} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {useForm} from 'react-hook-form';
 import {Auth} from 'aws-amplify';
+import ValueInput from '../components/valueInput/valueInput';
+import CustButton from '../components/CustomButton/CustomButton';
+import { CheckBox } from 'react-native-elements';
 
 const SignUpScreen = () => {
   const navi = useNavigation();
@@ -90,9 +90,9 @@ const SignUpScreen = () => {
         text="Create account"
         onPressing={handleSubmit(onSignUpClick)}
       />
-      <View style={{flexDirection: 'row', width: '85%', margin: 13}}>
-        <Checkbox
-          status={isChecked ? 'checked' : 'unchecked'}
+      <View style={{flexDirection: 'row', width: '85%',alignContent:'center',alignItems:'center'}}>
+        <CheckBox
+          checked={isChecked}
           onPress={() => {
             setIsChecked(!isChecked);
           }}
@@ -124,6 +124,7 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     alignItems: 'center',
+    backgroundColor:"#fff"
   },
   checkbox: {
     fontFamily: 'Poppins',

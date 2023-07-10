@@ -6,8 +6,8 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import ValueInput from '../CustInput/valueInput';
-import CustButton from '../CustButton/CustButton';
+import ValueInput from '../valueInput/valueInput';
+import CustButton from '../CustomButton/CustomButton';
 import { useNavigation ,useRoute } from "@react-navigation/native";
 import {Controller, useForm} from 'react-hook-form';
 import { Auth } from 'aws-amplify';
@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     alignItems: 'center',
+    backgroundColor:"#fff"
   },
   forgetpassword_header_content: {
     width: 229,

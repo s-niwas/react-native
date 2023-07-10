@@ -3,17 +3,18 @@ import {
   Alert,
   Image,
   Pressable,
-  ScrollView,
   StyleSheet,
-  Text,
   View,
   useWindowDimensions,
 } from 'react-native';
-import ValueInput from '../components/CustInput/valueInput';
-import CustButton from '../components/CustButton/CustButton';
 import {useNavigation} from '@react-navigation/native';
 import {Controller, useForm} from 'react-hook-form';
 import {Amplify, Auth} from 'aws-amplify';
+import ValueInput from '../components/valueInput/valueInput';
+import CustButton from '../components/CustomButton/CustomButton';
+import {CognitoHostedUIIdentityProvider} from '@aws-amplify/auth';
+import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
+import {Text} from 'react-native';
 
 const SignInScreen = () => {
   const navi = useNavigation();
@@ -40,8 +41,8 @@ const SignInScreen = () => {
       Alert.alert('Incorrect', e.message);
     }
     setLoading(false);
-    // console.log(data);
-    // navi.navigate('HomeScreen');
+    console.log(data);
+    //navi.navigate('HomeScreen');
   };
   const onForgetPasswordClick = () => {
     navi.navigate('ForgetPassword');
@@ -49,9 +50,32 @@ const SignInScreen = () => {
   const onsignupclicking = () => {
     navi.navigate('SignUp');
   };
-  const onsigninwithgoogle = () => {
+  const onsigninwithgoogle = async () => {
     console.warn('Redirecting to google sign in');
+    try {
+      const newUser=Auth.federatedSignIn({
+        provider: CognitoHostedUIIdentityProvider.Google,
+      });
+      await 
+      console.log('Google sign-in success');
+    } catch (e) {
+      console.log('Error signing with google :', e);
+    }
+    // try {
+    //   await GoogleSignin.configure({
+    //     webClientId:'630647575570-eohgnl8q5l6snjvm7pormifncgk4f6jc.apps.googleusercontent.com'
+    //   }); // Configure Google Sign-In
+    //   await GoogleSignin.hasPlayServices();
+    //   const { idToken } = await GoogleSignin.signIn();
+    //   await Auth.federatedSignIn( {
+    //     provider: CognitoHostedUIIdentityProvider.Google,
+    //       token:{ idToken }});
+    //   console.log('Google sign-in successful');
+    // } catch (error) {
+    //   console.log('Error signing in with Google:', error);
+    // }
   };
+
   const onsigninwithfacebook = () => {
     console.warn('Redirecting to facebook sign in');
   };
@@ -170,6 +194,7 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     alignItems: 'center',
+    backgroundColor: '#fff',
   },
   signin_top: {
     width: '100%',

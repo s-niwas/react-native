@@ -1,10 +1,10 @@
 import React from 'react';
 import NavigationScreen from './src/navigationscreen';
 import {Amplify,Auth} from 'aws-amplify';
-import config from './aws-exports';
+import awsconfig from './aws-exports';
 import {SafeAreaView, StyleSheet} from 'react-native';
 //import {withAuthenticator, AmplifyTheme} from 'aws-amplify-react-native';
-Amplify.configure(config);
+Amplify.configure(awsconfig);
 
 
 const App = () => {

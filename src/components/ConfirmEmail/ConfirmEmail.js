@@ -4,8 +4,8 @@ import {Alert, StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useForm} from 'react-hook-form';
 import {Auth} from 'aws-amplify';
-import ValueInput from '../CustInput/valueInput';
-import CustButton from '../CustButton/CustButton';
+import ValueInput from '../valueInput/valueInput';
+import CustButton from '../CustomButton/CustomButton';
 import {Button} from 'react-native-paper';
 
 const ConfirmEmail = () => {

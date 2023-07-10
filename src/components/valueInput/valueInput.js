@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Controller} from 'react-hook-form';
 import {Text, View, StyleSheet} from 'react-native';
-import {TextInput} from 'react-native-paper';
+import {TextInput,IconButton} from 'react-native-paper';
 const ValueInput = ({
   control,
   name,
@@ -11,7 +11,7 @@ const ValueInput = ({
   secureTextEntry,
   icons = false,
   editable = true,
-  keyboards = '',
+  keyboards = null,
 }) => {
   const [visibility, setVisibility] = useState(secureTextEntry);
   return (
@@ -37,7 +37,7 @@ const ValueInput = ({
                 selectionColor={error ? '#f00' : 'gray'}
                 right={
                   <TextInput.Icon
-                    icon={visibility ? 'eye' : 'eye-off'}
+                    icon={visibility ?'eye-off' : 'eye'}
                     color="black"
                     onPress={() => setVisibility(!visibility)}
                   />
