@@ -2,13 +2,16 @@ import React from 'react';
 import NavigationScreen from './src/navigationscreen';
 import {Amplify,Auth} from 'aws-amplify';
 import awsconfig from './aws-exports';
+import { NavigationContainer } from '@react-navigation/native';
+import { View ,Text} from 'react-native';
 import {SafeAreaView, StyleSheet} from 'react-native';
-//import {withAuthenticator, AmplifyTheme} from 'aws-amplify-react-native';
+import Tabss from './src/navigationscreen/bottom_navbar';
+
 Amplify.configure(awsconfig);
 
 
 const App = () => {
-  //Auth.signOut();
+  Auth.signOut();
   return (
     <SafeAreaView style={styles.root}>
       <NavigationScreen />
@@ -26,40 +29,3 @@ const styles=StyleSheet.create({
 
 export default App;
 
-
-// export default withAuthenticator(App,{signUpConfig , theme:customTheme});
-
-// const signUpConfig = {
-//   header:"My customised Sign Up",
-//   hideAllDefaults:true,
-//   signUpFields:[
-//     {
-//       label:"Email",
-//       key:"email",
-//       required:true,
-//       displayOrder:1,
-//       type:"string",
-//     },
-//     {
-//       label:"Password",
-//       key:"password",
-//       required:true,
-//       displayOrder:2,
-//       type:"password",
-//     },
-//     {
-//       label:"Username",
-//       key:"username",
-//       required:true,
-//       displayOrder:3,
-//       type:"string",
-//     },
-//   ]
-// };
-
-// const customTheme={...AmplifyTheme,
-//     button:{
-//       ...AmplifyTheme.button,
-//       backgroundColor:'blue',
-//     }
-// }

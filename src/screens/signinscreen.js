@@ -51,12 +51,12 @@ const SignInScreen = () => {
     navi.navigate('SignUp');
   };
   const onsigninwithgoogle = async () => {
+    Auth.signOut;
     console.warn('Redirecting to google sign in');
     try {
-      const newUser=Auth.federatedSignIn({
+      Auth.federatedSignIn({
         provider: CognitoHostedUIIdentityProvider.Google,
       });
-      await 
       console.log('Google sign-in success');
     } catch (e) {
       console.log('Error signing with google :', e);
@@ -76,8 +76,22 @@ const SignInScreen = () => {
     // }
   };
 
-  const onsigninwithfacebook = () => {
+  const onsigninwithfacebook = async () => {
     console.warn('Redirecting to facebook sign in');
+    Auth.
+    Auth.federatedSignIn({
+      provider: CognitoHostedUIIdentityProvider.Facebook,
+    });
+    // try {
+    //   Auth.federatedSignIn({
+    //     provider: CognitoHostedUIIdentityProvider.Facebook,
+    //   });
+      
+    //   console.log('Facebook sign-in success');
+    // } catch (e) {
+    //   console.log('Error signing with google :', e);
+    // }
+
   };
   return (
     <View style={styles.root}>

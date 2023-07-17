@@ -35,10 +35,7 @@ function Onboarding() {
               useNativeDriver: false,
             },
           )}
-          //scrollEventThrottle={32}
-          viewabilityConfig={viewConfig}
-          onViewableItemsChanged={viewableItemsChanged}
-          ref={slidesRef}
+          
         />
       </View>
       <Currentpagenavigation data={slide} scrollX={scrollX} />

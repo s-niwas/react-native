@@ -11,14 +11,21 @@ import ConfirmEmail from '../components/ConfirmEmail/ConfirmEmail';
 import { Auth,Hub } from 'aws-amplify';
 import { View } from 'react-native';
 import { ActivityIndicator } from 'react-native';
+import LinkScreen from '../screens/Course/LinkScreen';
+import BottomNav from './bottom_navbar';
+import Navigations from './navigation';
+import Tabss from './bottom_navbar';
+
 const Stack = createNativeStackNavigator();
 const NavigationScreen = () => {
 
   const [user,setUser]=useState(undefined);
+  const [alreadysignin,setalreadysignin]=useState(false);
   const checkuser=async()=>{
     try{
     const authuser=await Auth.currentAuthenticatedUser({ bypassCache:true});
-     setUser(authuser); }
+     setUser(authuser);
+    setalreadysignin(true); }
      catch(e){
       setUser(null);
      }
@@ -46,10 +53,14 @@ const NavigationScreen = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown:false}}>
-        {user ? (<Stack.Screen name='HomeScreen' component={HomeScreen}/>
-        ):(
+        {user ? ( <>
+          <Stack.Screen name='Navigation' component={Tabss}/>
+          <Stack.Screen name='HomeScreen' component={HomeScreen}/>
+        <Stack.Screen name='LinkScreen' component={LinkScreen}/>
+        </>
+        ):( 
           <>
-          <Stack.Screen name='Onboarding' component={Onboarding}/>
+          {alreadysignin ? null : <Stack.Screen name='Onboarding' component={Onboarding}/>} 
         <Stack.Screen name='SignIn' component={SignInScreen} />
         <Stack.Screen name='SignUp' component={SignUpScreen} />
         <Stack.Screen name='ForgetPassword' component={ForgetPassword}/>

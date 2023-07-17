@@ -4,7 +4,7 @@ export default[
         skip:'Skip',
         title:'Numerous free trial courses',
         description:'Free courses for you to \n find way your way to learning',
-        image:require('../photos/Screen1_bg_white.jpg'),
+        image:require('../photos/Screen1_bg_white.png'),
     },
     {
         id:'2',

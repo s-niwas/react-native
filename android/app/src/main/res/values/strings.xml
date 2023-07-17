@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">ReactNativeAssignment</string>
-    <!-- <string name="facebook_app_id">6084968341632558</string> -->
+    <string name="facebook_app_id">6084968341632558</string>
 </resources>
