@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {Animated, FlatList, StyleSheet, Text, View} from 'react-native';
+import {Animated, FlatList, StyleSheet, Text, View, useColorScheme} from 'react-native';
 import slide from './slide';
 import OnboardingItem from './OnboardingItem';
 import Currentpagenavigation from './currentpagenavigation';
@@ -12,14 +12,19 @@ function Onboarding() {
   }).current;
   const viewConfig = useRef({viewAreaCoveragePercentThreshold: 50}).current;
   const [currentIndex, setCurrentIndex] = useState(0);
+  const colorScheme=useColorScheme();
+  const isDarkMode = colorScheme === 'dark';
+  const contentBackgroundColor = isDarkMode ? '#1F1F39' : '#FFFFFF';
+  const textColor = isDarkMode ? 'white' : '#000000';;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:contentBackgroundColor}]}>
       <View
         style={{
           flex: 3,
           justifyContent: 'center',
           alignItems: 'center',
+          backgroundColor:contentBackgroundColor,
         }}>
         <FlatList
           data={slide}
@@ -34,8 +39,7 @@ function Onboarding() {
             {
               useNativeDriver: false,
             },
-          )}
-          
+          )} 
         />
       </View>
       <Currentpagenavigation data={slide} scrollX={scrollX} />

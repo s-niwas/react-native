@@ -7,12 +7,20 @@ import {
   useWindowDimensions,
   Button,
   TouchableOpacity,
+  useColorScheme,
 } from 'react-native';
 import slide from './slide';
 import {useNavigation} from '@react-navigation/native';
 
 export default OnboardingItem = ({item}) => {
   const {width} = useWindowDimensions();
+  const colorScheme=useColorScheme();
+  const isDarkMode = colorScheme === 'dark';
+  const imageBackgroundColor = isDarkMode ? "#1F1F39":'#CDECFE' //#D9F4F1
+  
+  const contentBackgroundColor = isDarkMode ? '#1F1F39' : '#FFFFFF';
+  const textColor = isDarkMode ? 'white' : '#000000';;
+  
   //const ref = React.useRef();
   //const [idd, setid] = useState(0);
   const skippingpress = () => {
@@ -28,23 +36,28 @@ export default OnboardingItem = ({item}) => {
   const loginpage = () => {
     navi.navigate('SignIn');
   };
+//   const imagebackgroundColor = theme === 'light' ? '#CDECFE' : '#1F1F39';
+// const contentbackgroundColor = theme === 'light' ? '#FFFFFF' : '#1F1F39';
 
   return (
-    <View style={[styles.container, {width}]}>
+    <View style={[styles.container, {width , backgroundColor: contentBackgroundColor}]}>
       {item.id != 3 ? (
         <Text style={styles.skip} onPress={skippingpress}>
           {item.skip}
         </Text>
       ) : null}
-      {item.id == 3
+      {/* {item.id ===1 ? imageBackgroundColor = isDarkMode ? "#1F1F39":'#CDECFE':null}
+      {item.id ===2 ? imageBackgroundColor = isDarkMode ? "#1F1F39":'#D9F4F1':null}
+      {item.id ===3 ? imageBackgroundColor = isDarkMode ? "#1F1F39":'#FFFFFF':null} */}
+      {item.id === 3
         ? () => {
             setid(true);
           }
         : null}
-      <Image source={item.image} style={[styles.image]} />
+      <Image source={item.image} style={[styles.image,{ backgroundColor: imageBackgroundColor }]} />
       <View style={{flex: 0.3, justifyContent: 'center'}}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.description}>{item.description}</Text>
+        <Text style={[styles.title,{ color:textColor }]}>{item.title}</Text>
+        <Text style={[styles.description,{ color:textColor }]}>{item.description}</Text>
         <View style={styles.buttons}>
           {item.id == 3 ? (
             <TouchableOpacity onPress={signuppage} style={styles.signup1}>
@@ -63,12 +76,13 @@ export default OnboardingItem = ({item}) => {
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor:'#FFF'
+    // backgroundColor:contentbackgroundColor,
   },
   buttons: {
     flexDirection: 'row',
@@ -110,6 +124,7 @@ const styles = StyleSheet.create({
     height: 260,
     alignItems: 'center',
     margin: 50,
+    
   },
   skip: {
     fontSize: 20,

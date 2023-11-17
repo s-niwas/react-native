@@ -52,28 +52,28 @@ const SignInScreen = () => {
   };
   const onsigninwithgoogle = async () => {
     Auth.signOut;
-    console.warn('Redirecting to google sign in');
-    try {
-      Auth.federatedSignIn({
-        provider: CognitoHostedUIIdentityProvider.Google,
-      });
-      console.log('Google sign-in success');
-    } catch (e) {
-      console.log('Error signing with google :', e);
-    }
+    // console.warn('Redirecting to google sign in');
     // try {
-    //   await GoogleSignin.configure({
-    //     webClientId:'630647575570-eohgnl8q5l6snjvm7pormifncgk4f6jc.apps.googleusercontent.com'
-    //   }); // Configure Google Sign-In
-    //   await GoogleSignin.hasPlayServices();
-    //   const { idToken } = await GoogleSignin.signIn();
-    //   await Auth.federatedSignIn( {
+    //   Auth.federatedSignIn({
     //     provider: CognitoHostedUIIdentityProvider.Google,
-    //       token:{ idToken }});
-    //   console.log('Google sign-in successful');
-    // } catch (error) {
-    //   console.log('Error signing in with Google:', error);
+    //   });
+    //   console.log('Google sign-in success');
+    // } catch (e) {
+    //   console.log('Error signing with google :', e);
     // }
+    try {
+      await GoogleSignin.configure({
+        webClientId:'630647575570-eohgnl8q5l6snjvm7pormifncgk4f6jc.apps.googleusercontent.com'
+      }); // Configure Google Sign-In
+      await GoogleSignin.hasPlayServices();
+      const { idToken } = await GoogleSignin.signIn();
+      await Auth.federatedSignIn( {
+        provider: CognitoHostedUIIdentityProvider.Google,
+          token:{ idToken }});
+      console.log('Google sign-in successful');
+    } catch (error) {
+      console.log('Error signing in with Google:', error);
+    }
   };
 
   const onsigninwithfacebook = async () => {
